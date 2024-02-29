@@ -2,8 +2,8 @@ import bcryptjs from 'bcryptjs'
 import User from '../models/user.model.js'
 import { httpCode } from '../utils/httpCodes.js'
 import { sendErrorResponse, sendSuccessResponse } from '../utils/response.js'
-import { isEmpty } from '../utils/userValidation.js'
 import { generateCookie } from '../utils/sendCookie.js'
+import { isEmpty } from '../utils/userValidation.js'
 
 /**
  *
@@ -87,7 +87,7 @@ export const login = async (req, res) => {
                 'User with that username does not exits!'
             )
 
-        const isPassword = bcryptjs.compare(password, user.password)
+        const isPassword = await bcryptjs.compare(password, user.password)
 
         if (!isPassword) return sendErrorResponse(res, httpCode.notAuthorized, 'Wrong Password!')
 
@@ -120,13 +120,8 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
     try {
-        res.cookie('token', '', {
-            expires: new Date(Date.now()),
-            maxAge: 0,
-            sameSite: process.env.NODE_ENV === 'DEVELOPMENT' ? 'none' : 'strict',
-            secure: process.env.NODE_ENV !== 'DEVELOPMENT',
-        })
-
+        res.cookie("jwt", "", { maxAge: 0 });
+        req.user = null
         return sendSuccessResponse(res, httpCode.successful, null, 'Logged Out!')
     } catch (error) {
         console.log('Error In User Controller, at function logout: ', error.message)

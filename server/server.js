@@ -5,11 +5,11 @@ import { connectDB } from './database/mongo.js'
 import authRouter from './routes/auth.routes.js'
 import messageRouter from './routes/message.routes.js'
 import userRouter from './routes/user.routes.js'
+import { app, server } from './socket/socket.js'
 
 config()
 connectDB()
 
-const app = express()
 const PORT = process.env.PORT || 5000
 
 app.use(express.json())
@@ -17,14 +17,12 @@ app.use(cookieParser())
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/messages', messageRouter)
-app.use('/api/v1/user', userRouter)
+app.use('/api/v1/users', userRouter)
 
-app.get('/test', (req, res) => {
-    res.status(200).send('<h1>Working Properly</h1>')
+app.get('/', (_, res) => {
+    res.status(200).send('Working Properly')
 })
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Listening on PORT ${PORT}`)
 })
-
-export { app }

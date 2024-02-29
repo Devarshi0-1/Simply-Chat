@@ -14,10 +14,10 @@ export const generateCookie = (userId, res) => {
 		expiresIn: '15d',
 	});
 
-	res.cookie('jwt', token, {
-		httpOnly: true,
+    res.cookie("jwt", token, {
 		maxAge,
-		sameSite: process.env.NODE_ENV === 'DEVELOPMENT' ? 'none' : 'strict',
-		secure: process.env.NODE_ENV !== 'DEVELOPMENT',
+		httpOnly: true,
+		sameSite: "strict",
+		secure: process.env.NODE_ENV !== "DEVELOPMENT",
 	});
 };
