@@ -26,7 +26,7 @@ app.get('/test', (_, res) => {
     res.status(200).send('Working Properly')
 })
 
-app.use(express.static(path.json(__dirname, '/client/dist')))
+app.use(express.static(path.join(__dirname, '/client/dist')))
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'))
